@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <style>html { font-size: 14px; font-family: Arial, Helvetica, sans-serif; }</style>
+  <title> Example 01 </title>
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.2.617/styles/kendo.common-material.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.2.617/styles/kendo.material.min.css" />
+  <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2020.2.617/styles/kendo.material.mobile.min.css" />
+  <link rel="stylesheet" href="https://demos.telerik.com/kendo-ui/content/shared/styles/examples-offline.css">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+
+<body onload="main()">
+  <table>
+    <tr>
+      <td>
+        <canvas id="webgl" width="400" height="400">
+          Please use a browser that supports canvas
+        </canvas>
+      </td>
+      <td style="width: 60%;">
+        <table>
+          <tr>
+            <td>
+              <ul id="fieldlist2">
+                <li>
+                  <div class="form-group">
+                    <label for="sel1">Select figure:</label>
+                    <select class="form-control" id="selectFig">
+                    </select>
+                  </div>
+                </li>
+                <li><button onclick="select()">SELECT</button></li>
+                <li>
+                  <div class="form-group">
+                    <label for="sel1">Select axis:</label>
+                    <select class="form-control" id="selectAxis" onchange="changeAxis()">
+                      <option>X</option>
+                      <option>Y</option>
+                      <option>Z</option>
+                    </select>
+                  </div>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <button id="restart" class="k-primary" onclick="restart()">Restart</button>
+            </td>
+          </tr>
+        </table>
+        <ul id="fieldlist">
+          <li>
+            <label>Rotation</label>
+            <input style="width: 80%;" id="slider"/>
+          </li>
+          <li>
+            <label>Translate</label>
+            <input style="width: 80%;" id="sliderTrans"/>
+          </li>
+          <li>
+            <label>Scale</label>
+            <input style="width: 80%;" id="sliderScale"/>
+          </li>
+          <li>
+            <input type="color" id="colorSelect">
+          </li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="width: 100%;">
+        <div class="box">
+          <h4>Console log</h4>
+          <div class="console"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <style>
+    #fieldlist {
+      margin: 0 0 -2em;
+      padding: 0;
+      text-align: center;
+    }
+
+    #fieldlist > li {
+      list-style: none;
+      padding-bottom: 2em;
+    }
+
+    #fieldlist label {
+      display: block;
+      padding-bottom: 1em;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: #444;
+    }
+
+    #fieldlist2 {
+      margin: 0 5em 2em;
+      padding: 0;
+    }
+
+    #fieldlist2 li {
+      list-style: none;
+      padding-bottom: 1em;
+    }
+  </style>
+
+  <script src="https://kendo.cdn.telerik.com/2020.2.617/js/jquery.min.js"></script>
+  <script src="https://kendo.cdn.telerik.com/2020.2.617/js/kendo.all.min.js"></script>
+  <script src="https://demos.telerik.com/kendo-ui/content/shared/js/console.js"></script>
+  <script src="main.js"> </script>
+  <script src="lib/webgl-utils.js"> </script>
+  <script src="lib/webgl-debug.js"> </script>
+  <script src="lib/cuon-utils.js"> </script>
+  <script src="lib/cuon-matrix.js"> </script>
+  
+  
+  
+</body>
+</html>
