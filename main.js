@@ -18,9 +18,18 @@ var VSHADER_SOURCE =
     index = 0;
     g_points = [];
     g_colors = [];
+    selectedFig = 0;
+    selectedFace = 0;
+    quantityOfPoints = 0;
+    concludedFace = 0;
+    modelMatrixes = []
+    maxFigures = 0;  
     kendoConsole.log("Restart");
     main();
   }
+
+  
+  // Getting the values for the affine transformations
 
   function onChangeRot(e) {
     kendoConsole.log("Change :: new Rotation value is: " + e.value);
@@ -101,6 +110,8 @@ function main(){
   canvas.onmousedown = function(ev){ click(ev, gl, canvas); };
   canvas.oncontextmenu = function(ev){ rightClick(ev, gl, false); return false;};
 
+  // To finish an object and not continue to add faces, you must "F" to
+  // conclude the object.
   document.onkeydown = function(ev){
     ev = ev || window.event;
     if (ev.keyCode == "70") // F KEYCODE
@@ -134,6 +145,38 @@ function addElementsToSelect(numFig){
   select.add(newOption);
 }
 
+function removeFigure(){
+  var select = document.getElementById("selectFig");
+  if (maxFigures > 0){
+    
+    
+    select.remove(maxFigures-1);
+    kendoConsole.log("Deleted figure");
+    
+    if (maxFigures == 1){
+      restart();
+    }
+    else{
+      // Removing the information of the object (matrix, colors, points)
+      g_points.splice(selectedFig, 1);
+      g_colors.splice(selectedFig, 1);
+      modelMatrixes.splice(selectedFig, 1);
+      selectedFig = 0;
+      selectedFace = 0;
+      quantityOfPoints = 0;
+      concludedFace = 0;
+      maxFigures = g_points.length;
+      // Drawing the scene
+      main();
+    }
+    
+    
+  }
+  else{
+    kendoConsole.log("Not object to delete");
+  }
+}
+
 function select(){
   var select = document.getElementById("selectFig");
   var value = select.value;
@@ -141,6 +184,7 @@ function select(){
     kendoConsole.log("Not figure available")
   }
   else{
+    // Know which option was selected
     selectedFig = parseInt(value.split(" ")[1]);
     console.log(value)
     kendoConsole.log(value + " selected");
@@ -149,6 +193,7 @@ function select(){
 }
 
 function changeTransformations(){
+  // Give the selected object the values of the sliders
   modelMatrixes[selectedFig] = new Matrix4();
   modelMatrixes[selectedFig].rotate(rotX, 0.5, 0, 0);
   modelMatrixes[selectedFig].rotate(rotY, 0.0, 0.5, 0.0);
@@ -161,6 +206,7 @@ function changeTransformations(){
 function rightClick(ev, gl, itsFigureDone) {
   if (quantityOfPoints > 2){
     if(itsFigureDone){
+      // When the user does the action to finish the object
       kendoConsole.log("Object Finished");
       addElementsToSelect(maxFigures);
       maxFigures++;
@@ -168,7 +214,7 @@ function rightClick(ev, gl, itsFigureDone) {
       quantityOfPoints = 0;
     }
     else if(concludedFace == 0){
-      
+      // When creating another face to the object
       selectedFace++;
       console.log("y")
       concludedFace = 1;
@@ -232,6 +278,7 @@ function draw(gl){
   gl.clear(gl.COLOR_BUFFER_BIT);
   for(var i = 0; i < g_points.length; i++){
     for (var j = 0; j < g_points[i].length; j++){
+      // Giving the RGB values as the main color of the object
       var red = g_colors[i][0];
       var green = g_colors[i][1];
       var blue = g_colors[i][2];
@@ -242,13 +289,17 @@ function draw(gl){
   }
 }
 
+// Letting user to change the color of the present or selected object
+
 var colorPicker = document.getElementById("colorSelect");
 colorPicker.addEventListener("input", function (){
   var color = colorPicker.value;
+  // Taking the values correspoding to the RGB values
   const red = parseInt(color.substr(1,2), 16)
   const green = parseInt(color.substr(3,2), 16)
   const blue = parseInt(color.substr(5,2), 16)
   kendoConsole.log("New color: R: " + red + " G: " +  green + " B: " +  blue);
+  // Because the colors are up to 1.0
   g_colors[selectedFig] = [red/255, green/255, blue/255];
   main();
 }, false);
@@ -279,6 +330,7 @@ function click(ev, gl, canvas) {
    clipY = y / rect.height * -2 + 1;
     quantityOfPoints++;
     if (g_points.length <= maxFigures){
+      // Creating a new space for the new figure
       g_points[maxFigures] = [];
       modelMatrixes[maxFigures] = new Matrix4();
       g_colors[maxFigures] = [Math.random(), Math.random(),Math.random()];
@@ -304,5 +356,3 @@ function click(ev, gl, canvas) {
     draw(gl);
   }
 }
-
-
